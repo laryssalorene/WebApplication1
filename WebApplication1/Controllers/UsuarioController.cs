@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Models;
+using SistemaDeTarefas.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace WebApplication1.Controllers
+namespace SistemaDeTarefas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -11,7 +11,7 @@ namespace WebApplication1.Controllers
     {
         // GET: api/<UsuarioController>
         [HttpGet]
-        public IEnumerable<UsuarioModel> Get()
+        public ActionResult<List<UsuarioModel>> BuscarTodosUsuarios()
         {
             List<UsuarioModel> usuarioModels = new List<UsuarioModel>();
 
