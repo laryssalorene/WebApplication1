@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SistemaDeTarefas.Models;
+using SistemaDeTarefas.Repositorios.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -9,46 +10,48 @@ namespace SistemaDeTarefas.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
+
+        private readonly IUsuarioRepositorio _usuarioRepositorio;
+        public UsuarioController(IUsuarioRepositorio usuarioRepositorio) 
+        {
+            _usuarioRepositorio = usuarioRepositorio;
+        }
+
         // GET: api/<UsuarioController>
         [HttpGet]
-        public ActionResult<List<UsuarioModel>> BuscarTodosUsuarios()
+        public async Task<ActionResult<List<UsuarioModel>>> BuscarTodosUsuarios()
         {
-            List<UsuarioModel> usuarioModels = new List<UsuarioModel>();
-
-            usuarioModels.Add(new UsuarioModel() { Id = 1, Nome = "Lala", Email = "lala@gmail.com"});
-        
-            return usuarioModels;
-        
+           List<UsuarioModel> usuarios = await _usuarioRepositorio.BuscarTodosUsuarios();
+            
+            return Ok(usuarios);
         }
-
-        // GET api/<UsuarioController>/5
         [HttpGet("{id}")]
-        public UsuarioModel Get(int id)
+        public async Task<ActionResult<UsuarioModel>> BuscarPorId(int id)
         {
-            UsuarioModel usuario = new UsuarioModel() { Id = 1, Nome = "Lala", Email = "lala@gmail.com" };
-
-            return usuario;
+            UsuarioModel usuario = await _usuarioRepositorio.BuscarPorId(id);
+            return Ok(usuario);
         }
 
-        // POST api/<UsuarioController>
         [HttpPost]
-        public void Post([FromBody] UsuarioModel usuario)
+        public async Task<ActionResult<UsuarioModel>> Cadastrar([FromBody] UsuarioModel usuarioModel)
         {
-            //[FromBody] é um termo que deixa claro que os dados
-            //do usuario vão vir do corpo desta requisição
-
+           UsuarioModel usuario =  await _usuarioRepositorio.Adicionar(usuarioModel);
+            return Ok(usuario);
         }
 
-        // PUT api/<UsuarioController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] UsuarioModel usuario)
+        public async Task<ActionResult<UsuarioModel>> Atualizar([FromBody] UsuarioModel usuarioModel, int id)
         {
+            usuarioModel.Id = id;
+            UsuarioModel usuario = await _usuarioRepositorio.Atualizar(usuarioModel, id);
+            return Ok(usuario);
         }
 
-        // DELETE api/<UsuarioController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task <ActionResult<UsuarioModel>> Apagar(int id)
         {
-        }
+            bool apagado =  await _usuarioRepositorio.Apagar(id);
+            return Ok(apagado);
+        }       
     }
 }
