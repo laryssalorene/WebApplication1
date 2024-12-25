@@ -31,6 +31,7 @@ namespace SistemaDeTarefas
             //É informado q toda vez em q for chamada esta interface,deverá ser
             //instanciada a classe UsuarioRepositorio
             builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+            builder.Services.AddScoped<ITarefaRepositorio, TarefaRepositorio>();
 
             //////////////
             var app = builder.Build();
