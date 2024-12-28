@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SistemaDeTarefas.Models;
 using SistemaDeTarefas.Repositorios.Interfaces;
 
@@ -7,6 +8,7 @@ using SistemaDeTarefas.Repositorios.Interfaces;
 
 namespace SistemaDeTarefas.Controllers
 {
+    [Authorize] //Qualquer rota passa a ser protegida. Necessário token
     [Route("api/[controller]")]
     [ApiController]
     public class TarefaController : ControllerBase
@@ -20,6 +22,7 @@ namespace SistemaDeTarefas.Controllers
 
         // GET: api/<TarefaController>
         [HttpGet]
+        //[Authorize] é possivel proteger rotas especificas tbm
         public async Task<ActionResult<List<TarefaModel>>> ListarTodas()
         {
            List<TarefaModel> tarefas = await _tarefaRepositorio.BuscarTodasTarefas();
